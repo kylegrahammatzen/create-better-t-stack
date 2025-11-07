@@ -136,7 +136,7 @@ function RootDocument() {
             <HeadContent />
           </head>
           <body>
-            {{#if (eq payments "autumn")}}<AutumnProvider>{{/if}}
+            {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
             <div className="grid h-svh grid-rows-[auto_1fr]">
               <Header />
               <Outlet />
@@ -159,7 +159,7 @@ function RootDocument() {
           <HeadContent />
         </head>
         <body>
-          {{#if (eq payments "autumn")}}<AutumnProvider>{{/if}}
+          {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
           <div className="grid h-svh grid-rows-[auto_1fr]">
             <Header />
             <Outlet />
@@ -179,7 +179,7 @@ function RootDocument() {
         <HeadContent />
       </head>
       <body>
-        {{#if (eq payments "autumn")}}<AutumnProvider>{{/if}}
+        {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
         <div className="grid h-svh grid-rows-[auto_1fr]">
           <Header />
           <Outlet />

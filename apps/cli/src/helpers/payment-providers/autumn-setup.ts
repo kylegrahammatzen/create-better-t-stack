@@ -146,12 +146,12 @@ export async function setupAutumn(
 				{
 					label: "Automatic",
 					value: "auto",
-					hint: "Run 'atmn init' now (opens browser for auth)",
+					hint: "Automated setup with provider CLI, sets .env",
 				},
 				{
 					label: "Manual",
 					value: "manual",
-					hint: "Run 'npx atmn init' yourself later",
+					hint: "Configure manually with 'npx atmn init' later",
 				},
 			],
 			initialValue: "auto",
@@ -168,10 +168,11 @@ export async function setupAutumn(
 			return;
 		}
 
-		// Automatic mode - run atmn init
+		// Automatic mode - run atmn login/init (creates .env automatically)
 		await runAtmnInit(projectDir, packageManager, backend);
 	} catch (_error) {
 		consola.error(pc.red("Failed to set up Autumn"));
+		// Only create empty .env on failure - atmn should have created it on success
 		await writeEnvFile(projectDir, backend);
 		if (backend === "convex") {
 			await writeConvexEnvInstructions(projectDir, packageManager);

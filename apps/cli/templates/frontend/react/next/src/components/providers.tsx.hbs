@@ -49,28 +49,28 @@ export default function Providers({
       {{#if (eq backend "convex")}}
       {{#if (eq auth "clerk")}}
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
-        {{#if (eq payments "autumn")}}<AutumnProvider>{children}</AutumnProvider>{{else}}{children}{{/if}}
+        {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={process.env.NEXT_PUBLIC_SERVER_URL}{{/unless}}>{children}</AutumnProvider>{{else}}{children}{{/if}}
       </ConvexProviderWithClerk>
       {{else if (eq auth "better-auth")}}
       <ConvexBetterAuthProvider client={convex} authClient={authClient}>
-        {{#if (eq payments "autumn")}}<AutumnProvider>{children}</AutumnProvider>{{else}}{children}{{/if}}
+        {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={process.env.NEXT_PUBLIC_SERVER_URL}{{/unless}}>{children}</AutumnProvider>{{else}}{children}{{/if}}
       </ConvexBetterAuthProvider>
       {{else}}
-      <ConvexProvider client={convex}>{{#if (eq payments "autumn")}}<AutumnProvider>{children}</AutumnProvider>{{else}}{children}{{/if}}</ConvexProvider>
+      <ConvexProvider client={convex}>{{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={process.env.NEXT_PUBLIC_SERVER_URL}{{/unless}}>{children}</AutumnProvider>{{else}}{children}{{/if}}</ConvexProvider>
       {{/if}}
       {{else}}
       {{#unless (eq api "none")}}
       <QueryClientProvider client={queryClient}>
         {{#if (eq api "orpc")}}
-        {{#if (eq payments "autumn")}}<AutumnProvider>{children}</AutumnProvider>{{else}}{children}{{/if}}
+        {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={process.env.NEXT_PUBLIC_SERVER_URL}{{/unless}}>{children}</AutumnProvider>{{else}}{children}{{/if}}
         {{/if}}
         {{#if (eq api "trpc")}}
-        {{#if (eq payments "autumn")}}<AutumnProvider>{children}</AutumnProvider>{{else}}{children}{{/if}}
+        {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={process.env.NEXT_PUBLIC_SERVER_URL}{{/unless}}>{children}</AutumnProvider>{{else}}{children}{{/if}}
         {{/if}}
         <ReactQueryDevtools />
       </QueryClientProvider>
       {{else}}
-      {{#if (eq payments "autumn")}}<AutumnProvider>{children}</AutumnProvider>{{else}}{children}{{/if}}
+      {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={process.env.NEXT_PUBLIC_SERVER_URL}{{/unless}}>{children}</AutumnProvider>{{else}}{children}{{/if}}
       {{/unless}}
       {{/if}}
       <Toaster richColors />

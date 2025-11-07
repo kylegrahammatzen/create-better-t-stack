@@ -77,7 +77,7 @@ function RootComponent() {
           disableTransitionOnChange
           storageKey="vite-ui-theme"
         >
-          {{#if (eq payments "autumn")}}<AutumnProvider>{{/if}}
+          {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
           <div className="grid grid-rows-[auto_1fr] h-svh">
             <Header />
             <Outlet />
@@ -92,7 +92,7 @@ function RootComponent() {
         disableTransitionOnChange
         storageKey="vite-ui-theme"
       >
-        {{#if (eq payments "autumn")}}<AutumnProvider>{{/if}}
+        {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
         <div className="grid grid-rows-[auto_1fr] h-svh">
           <Header />
           <Outlet />

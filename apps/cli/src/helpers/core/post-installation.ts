@@ -44,14 +44,14 @@ export async function displayPostInstallInstructions(
 	const databaseInstructions =
 		!isConvex && database !== "none"
 			? await getDatabaseInstructions(
-					database,
-					orm,
-					runCmd,
-					runtime,
-					dbSetup,
-					serverDeploy,
-					backend,
-				)
+				database,
+				orm,
+				runCmd,
+				runtime,
+				dbSetup,
+				serverDeploy,
+				backend,
+			)
 			: "";
 
 	const tauriInstructions = addons?.includes("tauri")
@@ -62,7 +62,7 @@ export async function displayPostInstallInstructions(
 		: "";
 	const nativeInstructions =
 		frontend?.includes("native-nativewind") ||
-		frontend?.includes("native-unistyles")
+			frontend?.includes("native-unistyles")
 			? getNativeInstructions(isConvex, isBackendSelf, frontend || [])
 			: "";
 	const pwaInstructions =
@@ -486,9 +486,9 @@ function getAutumnInstructions(backend?: string) {
 	const envPath = backend === "self" ? "apps/web/.env" : "apps/server/.env";
 	const convexNote =
 		backend === "convex"
-			? `\n${pc.cyan("•")} For Convex: Run ${pc.bold("npx convex env set AUTUMN_SECRET_KEY=<your_key>")}`
+			? `\n${pc.cyan("•")} Set Convex env: ${pc.bold("npx convex env set AUTUMN_SECRET_KEY=<your_key>")}`
 			: "";
-	return `${pc.bold("Autumn Payments Setup:")}\n${pc.cyan("•")} Visit ${pc.underline("https://app.useautumn.com")} to create account\n${pc.cyan("•")} Run ${pc.bold("npx atmn init")} to authenticate (if not done during setup)\n${pc.cyan("•")} Your ${pc.bold("AUTUMN_SECRET_KEY")} will be added to ${envPath}${convexNote}\n${pc.cyan("•")} Docs: ${pc.underline("https://docs.useautumn.com")}`;
+	return `${pc.bold("Autumn Payments Setup:")}\n${pc.cyan("•")} Get API keys from ${pc.underline("https://app.useautumn.com")}\n${pc.cyan("•")} Run ${pc.bold("npx atmn init")} to configure\n${pc.cyan("•")} ${pc.bold("AUTUMN_SECRET_KEY")} added to ${envPath}${convexNote}\n${pc.cyan("•")} Docs: ${pc.underline("https://docs.useautumn.com")}`;
 }
 
 function getAlchemyDeployInstructions(
