@@ -20,6 +20,16 @@ import { ConvexReactClient } from "convex/react";
 {{#if (eq auth "clerk")}}
 import { ClerkProvider, useAuth } from "@clerk/clerk-react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
+{{#if (eq payments "autumn")}}
+import { Authenticated } from "convex/react";
+{{/if}}
+{{else if (eq auth "better-auth")}}
+import { ConvexProvider } from "convex/react";
+import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
+import { authClient } from "./lib/auth-client";
+{{#if (eq payments "autumn")}}
+import { Authenticated } from "@convex-dev/better-auth/react";
+{{/if}}
 {{else}}
 import { ConvexProvider } from "convex/react";
 {{/if}}
@@ -80,14 +90,37 @@ export default function App() {
           disableTransitionOnChange
           storageKey="vite-ui-theme"
         >
+          {{#if (eq payments "autumn")}}<Authenticated>{{/if}}
           <div className="grid grid-rows-[auto_1fr] h-svh">
             <Header />
             <Outlet />
           </div>
           <Toaster richColors />
+          {{#if (eq payments "autumn")}}</Authenticated>{{/if}}
         </ThemeProvider>
       </ConvexProviderWithClerk>
     </ClerkProvider>
+    {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
+  );
+  {{else if (eq auth "better-auth")}}
+  return (
+    {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
+    <ConvexBetterAuthProvider client={convex} authClient={authClient}>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="dark"
+        disableTransitionOnChange
+        storageKey="vite-ui-theme"
+      >
+        {{#if (eq payments "autumn")}}<Authenticated>{{/if}}
+        <div className="grid grid-rows-[auto_1fr] h-svh">
+          <Header />
+          <Outlet />
+        </div>
+        <Toaster richColors />
+        {{#if (eq payments "autumn")}}</Authenticated>{{/if}}
+      </ThemeProvider>
+    </ConvexBetterAuthProvider>
     {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
   );
   {{else}}

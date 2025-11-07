@@ -5,10 +5,16 @@
 import { useAuth } from "@clerk/nextjs";
 import { ConvexReactClient } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
+{{#if (eq payments "autumn")}}
+import { Authenticated } from "convex/react";
+{{/if}}
 {{else if (eq auth "better-auth")}}
 import { ConvexProvider, ConvexReactClient, useConvex } from "convex/react";
 import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
 import { authClient } from "@/lib/auth-client";
+{{#if (eq payments "autumn")}}
+import { Authenticated } from "@convex-dev/better-auth/react";
+{{/if}}
 {{else}}
 import { ConvexProvider, ConvexReactClient, useConvex } from "convex/react";
 {{/if}}
@@ -40,9 +46,11 @@ const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 function AutumnWrapper({ children }: { children: React.ReactNode }) {
   const convex = useConvex();
   return (
+    {{#if (or (eq auth "better-auth") (eq auth "clerk"))}}<Authenticated>{{/if}}
     <AutumnProvider convex={convex} convexApi={(api as any).autumn}>
       {children}
     </AutumnProvider>
+    {{#if (or (eq auth "better-auth") (eq auth "clerk"))}}</Authenticated>{{/if}}
   );
 }
 {{/if}}
