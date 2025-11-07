@@ -129,6 +129,7 @@ function RootDocument() {
   {{#if (and (eq backend "convex") (eq auth "clerk"))}}
   const context = useRouteContext({ from: Route.id });
   return (
+    {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
     <ClerkProvider>
       <ConvexProviderWithClerk client={context.convexClient} useAuth={useAuth}>
         <html lang="en" className="dark">
@@ -136,56 +137,54 @@ function RootDocument() {
             <HeadContent />
           </head>
           <body>
-            {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
             <div className="grid h-svh grid-rows-[auto_1fr]">
               <Header />
               <Outlet />
             </div>
             <Toaster richColors />
-            {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
             <TanStackRouterDevtools position="bottom-left" />
             <Scripts />
           </body>
         </html>
       </ConvexProviderWithClerk>
     </ClerkProvider>
+    {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
   );
   {{else if (and (eq backend "convex") (eq auth "better-auth"))}}
   const context = useRouteContext({ from: Route.id });
   return (
+    {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
     <ConvexBetterAuthProvider client={context.convexClient} authClient={authClient}>
       <html lang="en" className="dark">
         <head>
           <HeadContent />
         </head>
         <body>
-          {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
           <div className="grid h-svh grid-rows-[auto_1fr]">
             <Header />
             <Outlet />
           </div>
           <Toaster richColors />
-          {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
           <TanStackRouterDevtools position="bottom-left" />
           <Scripts />
         </body>
       </html>
     </ConvexBetterAuthProvider>
+    {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
   );
   {{else}}
   return (
+    {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
     <html lang="en" className="dark">
       <head>
         <HeadContent />
       </head>
       <body>
-        {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
         <div className="grid h-svh grid-rows-[auto_1fr]">
           <Header />
           <Outlet />
         </div>
         <Toaster richColors />
-        {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
         <TanStackRouterDevtools position="bottom-left" />
         {{#unless (eq backend "convex")}}
           {{#unless (eq api "none")}}
@@ -195,6 +194,7 @@ function RootDocument() {
         <Scripts />
       </body>
     </html>
+    {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
   );
   {{/if}}
 }

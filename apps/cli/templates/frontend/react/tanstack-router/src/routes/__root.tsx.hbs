@@ -68,6 +68,7 @@ function RootComponent() {
   {{/if}}
 
   return (
+    {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
     <>
       <HeadContent />
       {{#if (eq api "orpc")}}
@@ -77,13 +78,11 @@ function RootComponent() {
           disableTransitionOnChange
           storageKey="vite-ui-theme"
         >
-          {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
           <div className="grid grid-rows-[auto_1fr] h-svh">
             <Header />
             <Outlet />
           </div>
           <Toaster richColors />
-          {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
         </ThemeProvider>
       {{else}}
       <ThemeProvider
@@ -92,13 +91,11 @@ function RootComponent() {
         disableTransitionOnChange
         storageKey="vite-ui-theme"
       >
-        {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
         <div className="grid grid-rows-[auto_1fr] h-svh">
           <Header />
           <Outlet />
         </div>
         <Toaster richColors />
-        {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
       </ThemeProvider>
       {{/if}}
       <TanStackRouterDevtools position="bottom-left" />
@@ -106,5 +103,6 @@ function RootComponent() {
       <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
       {{/if}}
     </>
+    {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
   );
 }
