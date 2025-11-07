@@ -30,6 +30,9 @@ import { google } from "@ai-sdk/google";
 {{#if (eq auth "better-auth")}}
 import { auth } from "@{{projectName}}/auth";
 {{/if}}
+{{#if (eq payments "autumn")}}
+import { autumnHandler } from "autumn-js/backend";
+{{/if}}
 
 const baseCorsConfig = {
   origin: process.env.CORS_ORIGIN || "",
@@ -135,6 +138,47 @@ fastify.route({
         code: "AUTH_FAILURE"
       });
     }
+  }
+});
+{{/if}}
+
+{{#if (eq payments "autumn")}}
+fastify.route({
+  method: ["GET", "POST"],
+  url: "/api/autumn/*",
+  async handler(request, reply) {
+{{#if (eq auth "better-auth")}}
+    const session = await auth.api.getSession({
+      headers: request.headers,
+    });
+
+    const customerId = session?.user.id || "anonymous";
+    const customerData = {
+      name: session?.user.name || "",
+      email: session?.user.email || "",
+    };
+{{else}}
+    // TODO: Implement your authentication logic here
+    const customerId = "user_id";
+    const customerData = { name: "", email: "" };
+{{/if}}
+
+    let body = null;
+    if (request.method !== "GET") {
+      body = request.body;
+    }
+
+    const { statusCode, response } = await autumnHandler({
+      customerId,
+      customerData,
+      request: {
+        url: request.url,
+        method: request.method,
+        body: body,
+      },
+    });
+
+    reply.status(statusCode).send(response);
   }
 });
 {{/if}}

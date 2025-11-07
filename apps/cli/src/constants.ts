@@ -164,6 +164,10 @@ export const dependencyVersionMap = {
 
 	"@polar-sh/better-auth": "^1.1.3",
 	"@polar-sh/sdk": "^0.34.16",
+
+	"autumn-js": "^0.1.46",
+	"@useautumn/convex": "^0.0.14",
+	atmn: "^0.0.28",
 } as const;
 
 export type AvailableDependencies = keyof typeof dependencyVersionMap;

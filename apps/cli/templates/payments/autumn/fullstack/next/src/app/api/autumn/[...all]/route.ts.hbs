@@ -1,0 +1,32 @@
+import { autumnHandler } from "autumn-js/next";
+{{#if (eq auth "better-auth")}}
+import { auth } from "@{{projectName}}/auth";
+import { headers } from "next/headers";
+{{/if}}
+
+export const { GET, POST } = autumnHandler({
+	identify: async () => {
+{{#if (eq auth "better-auth")}}
+		const session = await auth.api.getSession({
+			headers: await headers(),
+		});
+
+		return {
+			customerId: session?.user.id,
+			customerData: {
+				name: session?.user.name,
+				email: session?.user.email,
+			},
+		};
+{{else}}
+		// TODO: Implement your authentication logic here
+		return {
+			customerId: "user_id",
+			customerData: {
+				name: "",
+				email: "",
+			},
+		};
+{{/if}}
+	},
+});

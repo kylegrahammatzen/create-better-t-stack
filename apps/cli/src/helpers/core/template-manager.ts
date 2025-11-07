@@ -771,6 +771,25 @@ export async function setupPaymentsTemplate(
 				if (await fs.pathExists(paymentsWebSrc)) {
 					await processAndCopyFiles("**/*", paymentsWebSrc, webAppDir, context);
 				}
+
+				if (
+					context.backend === "self" &&
+					context.payments === "autumn" &&
+					(reactFramework === "next" || reactFramework === "tanstack-start")
+				) {
+					const paymentsFullstackSrc = path.join(
+						PKG_ROOT,
+						`templates/payments/autumn/fullstack/${reactFramework}`,
+					);
+					if (await fs.pathExists(paymentsFullstackSrc)) {
+						await processAndCopyFiles(
+							"**/*",
+							paymentsFullstackSrc,
+							webAppDir,
+							context,
+						);
+					}
+				}
 			}
 		} else if (hasNuxtWeb) {
 			const paymentsWebNuxtSrc = path.join(

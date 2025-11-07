@@ -21,6 +21,9 @@ import { appRouter } from "@{{projectName}}/api/routers/index";
 {{#if (eq auth "better-auth")}}
 import { auth } from "@{{projectName}}/auth";
 {{/if}}
+{{#if (eq payments "autumn")}}
+import { autumnHandler } from "autumn-js/backend";
+{{/if}}
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
@@ -55,6 +58,43 @@ app.use(
 
 {{#if (eq auth "better-auth")}}
 app.on(["POST", "GET"], "/api/auth/*", (c) => auth.handler(c.req.raw));
+{{/if}}
+
+{{#if (eq payments "autumn")}}
+app.use("/api/autumn/*", async (c) => {
+{{#if (eq auth "better-auth")}}
+	const session = await auth.api.getSession({
+		headers: c.req.raw.headers,
+	});
+
+	const customerId = session?.user.id || "anonymous";
+	const customerData = {
+		name: session?.user.name || "",
+		email: session?.user.email || "",
+	};
+{{else}}
+	// TODO: Implement your authentication logic here
+	const customerId = "user_id";
+	const customerData = { name: "", email: "" };
+{{/if}}
+
+	let body = null;
+	if (c.req.method !== "GET") {
+		body = await c.req.json();
+	}
+
+	const { statusCode, response } = await autumnHandler({
+		customerId,
+		customerData,
+		request: {
+			url: c.req.url,
+			method: c.req.method,
+			body: body,
+		},
+	});
+
+	return c.json(response, statusCode);
+});
 {{/if}}
 
 {{#if (eq api "orpc")}}

@@ -11,6 +11,9 @@ import "./index.css";
 import Header from "./components/header";
 import { ThemeProvider } from "./components/theme-provider";
 import { Toaster } from "./components/ui/sonner";
+{{#if (eq payments "autumn")}}
+import { AutumnProvider } from "autumn-js/react";
+{{/if}}
 
 {{#if (eq backend "convex")}}
 import { ConvexReactClient } from "convex/react";
@@ -76,11 +79,13 @@ export default function App() {
           disableTransitionOnChange
           storageKey="vite-ui-theme"
         >
+          {{#if (eq payments "autumn")}}<AutumnProvider>{{/if}}
           <div className="grid grid-rows-[auto_1fr] h-svh">
             <Header />
             <Outlet />
           </div>
           <Toaster richColors />
+          {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
         </ThemeProvider>
       </ConvexProviderWithClerk>
     </ClerkProvider>
@@ -94,11 +99,13 @@ export default function App() {
         disableTransitionOnChange
         storageKey="vite-ui-theme"
       >
+        {{#if (eq payments "autumn")}}<AutumnProvider>{{/if}}
         <div className="grid grid-rows-[auto_1fr] h-svh">
           <Header />
           <Outlet />
         </div>
         <Toaster richColors />
+        {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
       </ThemeProvider>
     </ConvexProvider>
   );
@@ -114,11 +121,13 @@ export default function App() {
         disableTransitionOnChange
         storageKey="vite-ui-theme"
       >
+        {{#if (eq payments "autumn")}}<AutumnProvider>{{/if}}
         <div className="grid grid-rows-[auto_1fr] h-svh">
           <Header />
           <Outlet />
         </div>
         <Toaster richColors />
+        {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
       </ThemeProvider>
       <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
     </QueryClientProvider>
@@ -134,11 +143,13 @@ export default function App() {
         disableTransitionOnChange
         storageKey="vite-ui-theme"
       >
+        {{#if (eq payments "autumn")}}<AutumnProvider>{{/if}}
         <div className="grid grid-rows-[auto_1fr] h-svh">
           <Header />
           <Outlet />
         </div>
         <Toaster richColors />
+        {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
       </ThemeProvider>
       <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
     </QueryClientProvider>
@@ -153,11 +164,13 @@ export default function App() {
       disableTransitionOnChange
       storageKey="vite-ui-theme"
     >
+      {{#if (eq payments "autumn")}}<AutumnProvider>{{/if}}
       <div className="grid grid-rows-[auto_1fr] h-svh">
         <Header />
         <Outlet />
       </div>
       <Toaster richColors />
+      {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
     </ThemeProvider>
   );
 }

@@ -1,0 +1,64 @@
+import { components } from "./_generated/api";
+import { Autumn } from "@useautumn/convex";
+{{#if (eq auth "better-auth")}}
+import { getSession } from "./auth";
+{{/if}}
+{{#if (eq auth "clerk")}}
+import { getUserId } from "./auth";
+{{/if}}
+
+export const autumn = new Autumn(components.autumn, {
+	secretKey: process.env.AUTUMN_SECRET_KEY!,
+	identify: async (ctx) => {
+{{#if (eq auth "better-auth")}}
+		const session = await getSession(ctx);
+		if (!session) return null;
+
+		return {
+			customerId: session.userId,
+			customerData: {
+				name: session.user?.name || "",
+				email: session.user?.email || "",
+			},
+		};
+{{else if (eq auth "clerk")}}
+		const userId = await getUserId(ctx);
+		if (!userId) return null;
+
+		return {
+			customerId: userId,
+			customerData: {
+				name: "",
+				email: "",
+			},
+		};
+{{else}}
+		// No auth configured - implement your own identification logic
+		return {
+			customerId: "anonymous",
+			customerData: {
+				name: "",
+				email: "",
+			},
+		};
+{{/if}}
+	},
+});
+
+export const {
+	track,
+	cancel,
+	query,
+	attach,
+	check,
+	checkout,
+	usage,
+	setupPayment,
+	createCustomer,
+	listProducts,
+	billingPortal,
+	createReferralCode,
+	redeemReferralCode,
+	createEntity,
+	getEntity,
+} = autumn;

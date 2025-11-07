@@ -391,6 +391,11 @@ ${hasWeb ? "# npx convex env set SITE_URL http://localhost:3001\n" : ""}
 			condition: config.payments === "polar",
 		},
 		{
+			key: "AUTUMN_SECRET_KEY",
+			value: "",
+			condition: config.payments === "autumn",
+		},
+		{
 			key: "CORS_ORIGIN",
 			value: corsOrigin,
 			condition: true,

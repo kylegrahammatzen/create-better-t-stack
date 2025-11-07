@@ -21,16 +21,32 @@ export async function getPaymentsChoice(
 		backend !== "convex" &&
 		(frontends?.length === 0 || splitFrontends(frontends).web.length > 0);
 
-	if (!isPolarCompatible) {
+	const isAutumnCompatible =
+		frontends?.length === 0 || splitFrontends(frontends).web.length > 0;
+
+	if (!isPolarCompatible && !isAutumnCompatible) {
 		return "none" as Payments;
 	}
 
 	const options = [
-		{
-			value: "polar" as Payments,
-			label: "Polar",
-			hint: "Turn your software into a business. 6 lines of code.",
-		},
+		...(isPolarCompatible
+			? [
+					{
+						value: "polar" as Payments,
+						label: "Polar",
+						hint: "Turn your software into a business. 6 lines of code.",
+					},
+				]
+			: []),
+		...(isAutumnCompatible
+			? [
+					{
+						value: "autumn" as Payments,
+						label: "Autumn",
+						hint: "Open-source layer between Stripe and your app.",
+					},
+				]
+			: []),
 		{
 			value: "none" as Payments,
 			label: "None",

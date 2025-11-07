@@ -25,6 +25,9 @@ import { google } from "@ai-sdk/google";
 import { auth } from "@{{projectName}}/auth";
 import { toNodeHandler } from "better-auth/node";
 {{/if}}
+{{#if (eq payments "autumn")}}
+import { autumnHandler } from "autumn-js/backend";
+{{/if}}
 
 const app = express();
 
@@ -41,6 +44,38 @@ app.use(
 
 {{#if (eq auth "better-auth")}}
 app.all("/api/auth{/*path}", toNodeHandler(auth));
+{{/if}}
+
+{{#if (eq payments "autumn")}}
+app.use("/api/autumn/*", async (req, res) => {
+{{#if (eq auth "better-auth")}}
+	const session = await auth.api.getSession({
+		headers: req.headers,
+	});
+
+	const customerId = session?.user.id || "anonymous";
+	const customerData = {
+		name: session?.user.name || "",
+		email: session?.user.email || "",
+	};
+{{else}}
+	// TODO: Implement your authentication logic here
+	const customerId = "user_id";
+	const customerData = { name: "", email: "" };
+{{/if}}
+
+	const { statusCode, response } = await autumnHandler({
+		customerId,
+		customerData,
+		request: {
+			url: req.url,
+			method: req.method,
+			body: req.body,
+		},
+	});
+
+	res.status(statusCode).json(response);
+});
 {{/if}}
 
 {{#if (eq api "trpc")}}

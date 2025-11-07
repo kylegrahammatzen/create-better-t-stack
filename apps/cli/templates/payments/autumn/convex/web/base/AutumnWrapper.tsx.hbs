@@ -1,0 +1,38 @@
+"use client";
+
+import { AutumnProvider } from "autumn-js/react";
+import { useConvex } from "convex/react";
+import type { FunctionReference } from "convex/server";
+
+type AutumnWrapperProps = {
+	children: React.ReactNode;
+};
+
+export const AutumnWrapper = (props: AutumnWrapperProps) => {
+	const convex = useConvex();
+
+	return (
+		<AutumnProvider
+			convex={convex}
+			convexApi={{
+				track: { _name: "autumn:track" } as FunctionReference<"mutation">,
+				cancel: { _name: "autumn:cancel" } as FunctionReference<"mutation">,
+				query: { _name: "autumn:query" } as FunctionReference<"query">,
+				attach: { _name: "autumn:attach" } as FunctionReference<"mutation">,
+				check: { _name: "autumn:check" } as FunctionReference<"query">,
+				checkout: { _name: "autumn:checkout" } as FunctionReference<"mutation">,
+				usage: { _name: "autumn:usage" } as FunctionReference<"query">,
+				setupPayment: { _name: "autumn:setupPayment" } as FunctionReference<"mutation">,
+				createCustomer: { _name: "autumn:createCustomer" } as FunctionReference<"mutation">,
+				listProducts: { _name: "autumn:listProducts" } as FunctionReference<"query">,
+				billingPortal: { _name: "autumn:billingPortal" } as FunctionReference<"mutation">,
+				createReferralCode: { _name: "autumn:createReferralCode" } as FunctionReference<"mutation">,
+				redeemReferralCode: { _name: "autumn:redeemReferralCode" } as FunctionReference<"mutation">,
+				createEntity: { _name: "autumn:createEntity" } as FunctionReference<"mutation">,
+				getEntity: { _name: "autumn:getEntity" } as FunctionReference<"query">,
+			}}
+		>
+			{props.children}
+		</AutumnProvider>
+	);
+};

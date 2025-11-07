@@ -87,7 +87,7 @@ export const AuthSchema = z
 export type Auth = z.infer<typeof AuthSchema>;
 
 export const PaymentsSchema = z
-	.enum(["polar", "none"])
+	.enum(["polar", "autumn", "none"])
 	.describe("Payments provider");
 export type Payments = z.infer<typeof PaymentsSchema>;
 

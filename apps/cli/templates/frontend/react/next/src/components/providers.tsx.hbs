@@ -24,6 +24,9 @@ import { queryClient } from "@/utils/trpc";
 {{/if}}
 {{/unless}}
 {{/if}}
+{{#if (eq payments "autumn")}}
+import { AutumnProvider } from "autumn-js/react";
+{{/if}}
 import { ThemeProvider } from "./theme-provider";
 import { Toaster } from "./ui/sonner";
 
@@ -46,28 +49,28 @@ export default function Providers({
       {{#if (eq backend "convex")}}
       {{#if (eq auth "clerk")}}
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
-        {children}
+        {{#if (eq payments "autumn")}}<AutumnProvider>{children}</AutumnProvider>{{else}}{children}{{/if}}
       </ConvexProviderWithClerk>
       {{else if (eq auth "better-auth")}}
       <ConvexBetterAuthProvider client={convex} authClient={authClient}>
-        {children}
+        {{#if (eq payments "autumn")}}<AutumnProvider>{children}</AutumnProvider>{{else}}{children}{{/if}}
       </ConvexBetterAuthProvider>
       {{else}}
-      <ConvexProvider client={convex}>{children}</ConvexProvider>
+      <ConvexProvider client={convex}>{{#if (eq payments "autumn")}}<AutumnProvider>{children}</AutumnProvider>{{else}}{children}{{/if}}</ConvexProvider>
       {{/if}}
       {{else}}
       {{#unless (eq api "none")}}
       <QueryClientProvider client={queryClient}>
         {{#if (eq api "orpc")}}
-        {children}
+        {{#if (eq payments "autumn")}}<AutumnProvider>{children}</AutumnProvider>{{else}}{children}{{/if}}
         {{/if}}
         {{#if (eq api "trpc")}}
-        {children}
+        {{#if (eq payments "autumn")}}<AutumnProvider>{children}</AutumnProvider>{{else}}{children}{{/if}}
         {{/if}}
         <ReactQueryDevtools />
       </QueryClientProvider>
       {{else}}
-      {children}
+      {{#if (eq payments "autumn")}}<AutumnProvider>{children}</AutumnProvider>{{else}}{children}{{/if}}
       {{/unless}}
       {{/if}}
       <Toaster richColors />

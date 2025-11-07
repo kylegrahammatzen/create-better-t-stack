@@ -78,6 +78,8 @@ export async function displayPostInstallInstructions(
 		config.payments === "polar" && config.auth === "better-auth"
 			? getPolarInstructions(backend)
 			: "";
+	const autumnInstructions =
+		config.payments === "autumn" ? getAutumnInstructions(backend) : "";
 	const wranglerDeployInstructions = getWranglerDeployInstructions(
 		runCmd,
 		webDeploy,
@@ -212,6 +214,7 @@ export async function displayPostInstallInstructions(
 	if (starlightInstructions) output += `\n${starlightInstructions.trim()}\n`;
 	if (clerkInstructions) output += `\n${clerkInstructions.trim()}\n`;
 	if (polarInstructions) output += `\n${polarInstructions.trim()}\n`;
+	if (autumnInstructions) output += `\n${autumnInstructions.trim()}\n`;
 
 	if (noOrmWarning) output += `\n${noOrmWarning.trim()}\n`;
 	if (bunWebNativeWarning) output += `\n${bunWebNativeWarning.trim()}\n`;
@@ -477,6 +480,15 @@ function getClerkInstructions() {
 function getPolarInstructions(backend?: string) {
 	const envPath = backend === "self" ? "apps/web/.env" : "apps/server/.env";
 	return `${pc.bold("Polar Payments Setup:")}\n${pc.cyan("•")} Get access token & product ID from ${pc.underline("https://sandbox.polar.sh/")}\n${pc.cyan("•")} Set POLAR_ACCESS_TOKEN in ${envPath}`;
+}
+
+function getAutumnInstructions(backend?: string) {
+	const envPath = backend === "self" ? "apps/web/.env" : "apps/server/.env";
+	const convexNote =
+		backend === "convex"
+			? `\n${pc.cyan("•")} For Convex: Run ${pc.bold("npx convex env set AUTUMN_SECRET_KEY=<your_key>")}`
+			: "";
+	return `${pc.bold("Autumn Payments Setup:")}\n${pc.cyan("•")} Visit ${pc.underline("https://app.useautumn.com")} to create account\n${pc.cyan("•")} Run ${pc.bold("npx atmn init")} to authenticate (if not done during setup)\n${pc.cyan("•")} Your ${pc.bold("AUTUMN_SECRET_KEY")} will be added to ${envPath}${convexNote}\n${pc.cyan("•")} Docs: ${pc.underline("https://docs.useautumn.com")}`;
 }
 
 function getAlchemyDeployInstructions(

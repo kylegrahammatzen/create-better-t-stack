@@ -311,6 +311,15 @@ export function validatePaymentsCompatibility(
 			);
 		}
 	}
+
+	if (payments === "autumn") {
+		const { web } = splitFrontends(frontends);
+		if (web.length === 0 && frontends.length > 0) {
+			exitWithError(
+				"Autumn payments requires a web frontend (Next.js, TanStack Router, TanStack Start, React Router, Nuxt, Svelte, or Solid).",
+			);
+		}
+	}
 }
 
 export function validateExamplesCompatibility(

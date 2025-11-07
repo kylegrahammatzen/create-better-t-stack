@@ -1,0 +1,52 @@
+import { autumnHandler } from "autumn-js/backend";
+import { createFileRoute } from "@tanstack/react-router";
+{{#if (eq auth "better-auth")}}
+import { auth } from "@{{projectName}}/auth";
+{{/if}}
+
+const handler = async (request: Request) => {
+{{#if (eq auth "better-auth")}}
+	const session = await auth.api.getSession({
+		headers: request.headers,
+	});
+
+	const customerId = session?.user.id || "anonymous";
+	const customerData = {
+		name: session?.user.name || "",
+		email: session?.user.email || "",
+	};
+{{else}}
+	// TODO: Implement your authentication logic here
+	const customerId = "user_id";
+	const customerData = { name: "", email: "" };
+{{/if}}
+
+	let body = null;
+	if (request.method !== "GET") {
+		body = await request.json();
+	}
+
+	const { statusCode, response } = await autumnHandler({
+		customerId,
+		customerData,
+		request: {
+			url: request.url,
+			method: request.method,
+			body: body,
+		},
+	});
+
+	return new Response(JSON.stringify(response), {
+		status: statusCode,
+		headers: { "Content-Type": "application/json" },
+	});
+};
+
+export const Route = createFileRoute("/api/autumn/$")({
+	server: {
+		handlers: {
+			GET: ({ request }) => handler(request),
+			POST: ({ request }) => handler(request),
+		},
+	},
+});

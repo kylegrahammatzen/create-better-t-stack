@@ -1,4 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
+{{#if (eq payments "autumn")}}
+import { AutumnProvider } from "autumn-js/react";
+{{/if}}
 {{#unless (eq backend "convex")}} {{#unless (eq api "none")}}
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 {{/unless}} {{/unless}}
@@ -133,11 +136,13 @@ function RootDocument() {
             <HeadContent />
           </head>
           <body>
+            {{#if (eq payments "autumn")}}<AutumnProvider>{{/if}}
             <div className="grid h-svh grid-rows-[auto_1fr]">
               <Header />
               <Outlet />
             </div>
             <Toaster richColors />
+            {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
             <TanStackRouterDevtools position="bottom-left" />
             <Scripts />
           </body>
@@ -154,11 +159,13 @@ function RootDocument() {
           <HeadContent />
         </head>
         <body>
+          {{#if (eq payments "autumn")}}<AutumnProvider>{{/if}}
           <div className="grid h-svh grid-rows-[auto_1fr]">
             <Header />
             <Outlet />
           </div>
           <Toaster richColors />
+          {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
           <TanStackRouterDevtools position="bottom-left" />
           <Scripts />
         </body>
@@ -172,11 +179,13 @@ function RootDocument() {
         <HeadContent />
       </head>
       <body>
+        {{#if (eq payments "autumn")}}<AutumnProvider>{{/if}}
         <div className="grid h-svh grid-rows-[auto_1fr]">
           <Header />
           <Outlet />
         </div>
         <Toaster richColors />
+        {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
         <TanStackRouterDevtools position="bottom-left" />
         {{#unless (eq backend "convex")}}
           {{#unless (eq api "none")}}

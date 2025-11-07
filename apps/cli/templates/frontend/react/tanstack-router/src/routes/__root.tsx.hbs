@@ -1,6 +1,9 @@
 import Header from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+{{#if (eq payments "autumn")}}
+import { AutumnProvider } from "autumn-js/react";
+{{/if}}
 {{#if (eq api "orpc")}}
 import { link, orpc } from "@/utils/orpc";
 import type { QueryClient } from "@tanstack/react-query";
@@ -74,11 +77,13 @@ function RootComponent() {
           disableTransitionOnChange
           storageKey="vite-ui-theme"
         >
+          {{#if (eq payments "autumn")}}<AutumnProvider>{{/if}}
           <div className="grid grid-rows-[auto_1fr] h-svh">
             <Header />
             <Outlet />
           </div>
           <Toaster richColors />
+          {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
         </ThemeProvider>
       {{else}}
       <ThemeProvider
@@ -87,11 +92,13 @@ function RootComponent() {
         disableTransitionOnChange
         storageKey="vite-ui-theme"
       >
+        {{#if (eq payments "autumn")}}<AutumnProvider>{{/if}}
         <div className="grid grid-rows-[auto_1fr] h-svh">
           <Header />
           <Outlet />
         </div>
         <Toaster richColors />
+        {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
       </ThemeProvider>
       {{/if}}
       <TanStackRouterDevtools position="bottom-left" />
