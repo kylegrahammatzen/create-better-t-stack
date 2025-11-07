@@ -67,15 +67,17 @@ app.use("/api/autumn/*", async (c) => {
 		headers: c.req.raw.headers,
 	});
 
-	const customerId = session?.user.id || "anonymous";
-	const customerData = {
-		name: session?.user.name || "",
-		email: session?.user.email || "",
-	};
+	const customerId = session?.user.id;
+	const customerData = session?.user.id ? {
+		name: session.user.name || "",
+		email: session.user.email || "",
+	} : undefined;
 {{else}}
 	// TODO: Implement your authentication logic here
-	const customerId = "user_id";
-	const customerData = { name: "", email: "" };
+	// const customerId = "your_user_id";
+	// const customerData = { name: "user_name", email: "user_email" };
+	const customerId = undefined;
+	const customerData = undefined;
 {{/if}}
 
 	let body = null;
