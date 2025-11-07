@@ -71,6 +71,7 @@ export default function App() {
   );
   {{#if (eq auth "clerk")}}
   return (
+    {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
     <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}>
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         <ThemeProvider
@@ -79,19 +80,19 @@ export default function App() {
           disableTransitionOnChange
           storageKey="vite-ui-theme"
         >
-          {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
           <div className="grid grid-rows-[auto_1fr] h-svh">
             <Header />
             <Outlet />
           </div>
           <Toaster richColors />
-          {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
         </ThemeProvider>
       </ConvexProviderWithClerk>
     </ClerkProvider>
+    {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
   );
   {{else}}
   return (
+    {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
     <ConvexProvider client={convex}>
       <ThemeProvider
         attribute="class"
@@ -99,21 +100,21 @@ export default function App() {
         disableTransitionOnChange
         storageKey="vite-ui-theme"
       >
-        {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
         <div className="grid grid-rows-[auto_1fr] h-svh">
           <Header />
           <Outlet />
         </div>
         <Toaster richColors />
-        {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
       </ThemeProvider>
     </ConvexProvider>
+    {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
   );
   {{/if}}
 }
 {{else if (eq api "orpc")}}
 export default function App() {
   return (
+    {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
     <QueryClientProvider client={queryClient}>
       <ThemeProvider
         attribute="class"
@@ -121,21 +122,21 @@ export default function App() {
         disableTransitionOnChange
         storageKey="vite-ui-theme"
       >
-        {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
         <div className="grid grid-rows-[auto_1fr] h-svh">
           <Header />
           <Outlet />
         </div>
         <Toaster richColors />
-        {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
       </ThemeProvider>
       <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
     </QueryClientProvider>
+    {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
   );
 }
 {{else if (eq api "trpc")}}
 export default function App() {
   return (
+    {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
     <QueryClientProvider client={queryClient}>
       <ThemeProvider
         attribute="class"
@@ -143,35 +144,34 @@ export default function App() {
         disableTransitionOnChange
         storageKey="vite-ui-theme"
       >
-        {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
         <div className="grid grid-rows-[auto_1fr] h-svh">
           <Header />
           <Outlet />
         </div>
         <Toaster richColors />
-        {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
       </ThemeProvider>
       <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
     </QueryClientProvider>
+    {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
   );
 }
 {{else}}
 export default function App() {
   return (
+    {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
     <ThemeProvider
       attribute="class"
       defaultTheme="dark"
       disableTransitionOnChange
       storageKey="vite-ui-theme"
     >
-      {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
       <div className="grid grid-rows-[auto_1fr] h-svh">
         <Header />
         <Outlet />
       </div>
       <Toaster richColors />
-      {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
     </ThemeProvider>
+    {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
   );
 }
 {{/if}}
