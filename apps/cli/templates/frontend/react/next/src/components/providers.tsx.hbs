@@ -6,11 +6,14 @@ import { useAuth } from "@clerk/nextjs";
 import { ConvexReactClient } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 {{else if (eq auth "better-auth")}}
-import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { ConvexProvider, ConvexReactClient, useConvex } from "convex/react";
 import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
 import { authClient } from "@/lib/auth-client";
 {{else}}
-import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { ConvexProvider, ConvexReactClient, useConvex } from "convex/react";
+{{/if}}
+{{#if (eq payments "autumn")}}
+import { api } from "../../../../packages/backend/convex/_generated/api";
 {{/if}}
 {{else}}
 {{#unless (eq api "none")}}
@@ -32,6 +35,17 @@ import { Toaster } from "./ui/sonner";
 
 {{#if (eq backend "convex")}}
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+{{#if (eq payments "autumn")}}
+
+function AutumnWrapper({ children }: { children: React.ReactNode }) {
+  const convex = useConvex();
+  return (
+    <AutumnProvider convex={convex} convexApi={(api as any).autumn}>
+      {children}
+    </AutumnProvider>
+  );
+}
+{{/if}}
 {{/if}}
 
 export default function Providers({
@@ -49,14 +63,14 @@ export default function Providers({
       {{#if (eq backend "convex")}}
       {{#if (eq auth "clerk")}}
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
-        {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={process.env.NEXT_PUBLIC_SERVER_URL}{{/unless}}>{children}</AutumnProvider>{{else}}{children}{{/if}}
+        {{#if (eq payments "autumn")}}<AutumnWrapper>{children}</AutumnWrapper>{{else}}{children}{{/if}}
       </ConvexProviderWithClerk>
       {{else if (eq auth "better-auth")}}
       <ConvexBetterAuthProvider client={convex} authClient={authClient}>
-        {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={process.env.NEXT_PUBLIC_SERVER_URL}{{/unless}}>{children}</AutumnProvider>{{else}}{children}{{/if}}
+        {{#if (eq payments "autumn")}}<AutumnWrapper>{children}</AutumnWrapper>{{else}}{children}{{/if}}
       </ConvexBetterAuthProvider>
       {{else}}
-      <ConvexProvider client={convex}>{{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={process.env.NEXT_PUBLIC_SERVER_URL}{{/unless}}>{children}</AutumnProvider>{{else}}{children}{{/if}}</ConvexProvider>
+      <ConvexProvider client={convex}>{{#if (eq payments "autumn")}}<AutumnWrapper>{children}</AutumnWrapper>{{else}}{children}{{/if}}</ConvexProvider>
       {{/if}}
       {{else}}
       {{#unless (eq api "none")}}

@@ -1,7 +1,13 @@
 import { defineApp } from "convex/server";
 import betterAuth from "@convex-dev/better-auth/convex.config";
+{{#if (eq payments "autumn")}}
+import autumn from "@useautumn/convex/convex.config";
+{{/if}}
 
 const app = defineApp();
 app.use(betterAuth);
+{{#if (eq payments "autumn")}}
+app.use(autumn);
+{{/if}}
 
 export default app;
