@@ -39,12 +39,12 @@ export const autumn = new Autumn(components.autumn, {
 			},
 		};
 {{else}}
-		// No auth configured - implement your own identification logic
+		// No auth configured - return default customer
 		return {
-			customerId: "anonymous",
+			customerId: "better-t-stack",
 			customerData: {
-				name: "",
-				email: "",
+				name: "Better T Stack",
+				email: "better-t-stack@example.com",
 			},
 		};
 {{/if}}

@@ -10,15 +10,22 @@ const handler = async (request: Request) => {
 		headers: request.headers,
 	});
 
-	const customerId = session?.user.id || "anonymous";
+	if (!session) {
+		return new Response(JSON.stringify({ error: "Unauthorized" }), {
+			status: 401,
+			headers: { "Content-Type": "application/json" },
+		});
+	}
+
+	const customerId = session.user.id;
 	const customerData = {
-		name: session?.user.name || "",
-		email: session?.user.email || "",
+		name: session.user.name || "",
+		email: session.user.email || "",
 	};
 {{else}}
-	// TODO: Implement your authentication logic here
-	const customerId = "user_id";
-	const customerData = { name: "", email: "" };
+	// No auth configured - use default customer
+	const customerId = "better-t-stack";
+	const customerData = { name: "Better T Stack", email: "better-t-stack@example.com" };
 {{/if}}
 
 	let body = null;

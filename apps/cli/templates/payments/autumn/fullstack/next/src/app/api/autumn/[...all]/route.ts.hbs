@@ -21,9 +21,14 @@ export const { GET, POST } = autumnHandler({
 			},
 		};
 {{else}}
-		// TODO: Implement your authentication logic here
-		// Return null if no user is logged in
-		return null;
+		// No auth configured - return default customer
+		return {
+			customerId: "better-t-stack",
+			customerData: {
+				name: "Better T Stack",
+				email: "better-t-stack@example.com",
+			},
+		};
 {{/if}}
 	},
 });
