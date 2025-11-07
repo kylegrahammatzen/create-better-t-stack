@@ -67,17 +67,28 @@ app.use("/api/autumn/*", async (c) => {
 		headers: c.req.raw.headers,
 	});
 
-	const customerId = session?.user.id;
-	const customerData = session?.user.id ? {
+	if (!session) {
+		return c.json({ error: "Unauthorized" }, 401);
+	}
+
+	const customerId = session.user.id;
+	const customerData = {
 		name: session.user.name || "",
 		email: session.user.email || "",
-	} : undefined;
-{{else}}
-	// TODO: Implement your authentication logic here
-	// const customerId = "your_user_id";
-	// const customerData = { name: "user_name", email: "user_email" };
-	const customerId = undefined;
-	const customerData = undefined;
+	};
+{{else if (eq auth "clerk")}}
+	const userId = c.get("userId");
+	const sessionClaims = c.get("sessionClaims");
+
+	if (!userId) {
+		return c.json({ error: "Unauthorized" }, 401);
+	}
+
+	const customerId = userId;
+	const customerData = {
+		name: (sessionClaims?.name as string) || "",
+		email: (sessionClaims?.email as string) || "",
+	};
 {{/if}}
 
 	let body = null;

@@ -1,6 +1,19 @@
 import { Toaster } from "@/components/ui/sonner";
 {{#if (eq payments "autumn")}}
 import { AutumnProvider } from "autumn-js/react";
+{{#if (eq backend "convex")}}
+{{#if (eq auth "clerk")}}
+import { Authenticated } from "convex/react";
+{{else if (eq auth "better-auth")}}
+import { Authenticated } from "@convex-dev/better-auth/react";
+{{/if}}
+{{else}}
+{{#if (eq auth "clerk")}}
+import { SignedIn, SignedOut } from "@clerk/tanstack-react-start";
+{{else if (eq auth "better-auth")}}
+import { authClient } from "@/lib/auth-client";
+{{/if}}
+{{/if}}
 {{/if}}
 {{#unless (eq backend "convex")}} {{#unless (eq api "none")}}
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -125,6 +138,41 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   {{/if}}
 });
 
+{{#unless (eq backend "convex")}}
+{{#if (eq payments "autumn")}}
+{{#if (eq auth "clerk")}}
+function AutumnWrapper({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <SignedIn>
+        <AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>
+          {children}
+        </AutumnProvider>
+      </SignedIn>
+      <SignedOut>
+        {children}
+      </SignedOut>
+    </>
+  );
+}
+{{else if (eq auth "better-auth")}}
+function AutumnWrapper({ children }: { children: React.ReactNode }) {
+  const session = authClient.useSession();
+
+  if (!session.data) {
+    return children;
+  }
+
+  return (
+    <AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>
+      {children}
+    </AutumnProvider>
+  );
+}
+{{/if}}
+{{/if}}
+{{/unless}}
+
 function RootDocument() {
   {{#if (and (eq backend "convex") (eq auth "clerk"))}}
   const context = useRouteContext({ from: Route.id });
@@ -137,11 +185,13 @@ function RootDocument() {
             <HeadContent />
           </head>
           <body>
+            {{#if (eq payments "autumn")}}<Authenticated>{{/if}}
             <div className="grid h-svh grid-rows-[auto_1fr]">
               <Header />
               <Outlet />
             </div>
             <Toaster richColors />
+            {{#if (eq payments "autumn")}}</Authenticated>{{/if}}
             <TanStackRouterDevtools position="bottom-left" />
             <Scripts />
           </body>
@@ -160,11 +210,13 @@ function RootDocument() {
           <HeadContent />
         </head>
         <body>
+          {{#if (eq payments "autumn")}}<Authenticated>{{/if}}
           <div className="grid h-svh grid-rows-[auto_1fr]">
             <Header />
             <Outlet />
           </div>
           <Toaster richColors />
+          {{#if (eq payments "autumn")}}</Authenticated>{{/if}}
           <TanStackRouterDevtools position="bottom-left" />
           <Scripts />
         </body>
@@ -174,7 +226,7 @@ function RootDocument() {
   );
   {{else}}
   return (
-    {{#if (eq payments "autumn")}}<AutumnProvider{{#unless (eq backend "self")}} backendUrl={import.meta.env.VITE_SERVER_URL}{{/unless}}>{{/if}}
+    {{#if (eq payments "autumn")}}<AutumnWrapper>{{/if}}
     <html lang="en" className="dark">
       <head>
         <HeadContent />
@@ -194,7 +246,7 @@ function RootDocument() {
         <Scripts />
       </body>
     </html>
-    {{#if (eq payments "autumn")}}</AutumnProvider>{{/if}}
+    {{#if (eq payments "autumn")}}</AutumnWrapper>{{/if}}
   );
   {{/if}}
 }

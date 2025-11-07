@@ -313,6 +313,12 @@ export function validatePaymentsCompatibility(
 	}
 
 	if (payments === "autumn") {
+		if (!auth || auth === "none") {
+			exitWithError(
+				"Autumn payments requires authentication. Please use '--auth better-auth' or '--auth clerk' to enable user identification for payment processing.",
+			);
+		}
+
 		const { web } = splitFrontends(frontends);
 		if (web.length === 0 && frontends.length > 0) {
 			exitWithError(
