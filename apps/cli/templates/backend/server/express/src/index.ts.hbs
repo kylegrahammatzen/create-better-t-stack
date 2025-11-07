@@ -31,6 +31,8 @@ import { autumnHandler } from "autumn-js/backend";
 
 const app = express();
 
+app.use(express.json());
+
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN || "",
@@ -135,8 +137,6 @@ app.use(async (req, res, next) => {
   next();
 });
 {{/if}}
-
-app.use(express.json());
 
 {{#if (includes examples "ai")}}
 app.post("/ai", async (req, res) => {
