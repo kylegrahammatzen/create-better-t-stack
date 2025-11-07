@@ -47,7 +47,7 @@ app.all("/api/auth{/*path}", toNodeHandler(auth));
 {{/if}}
 
 {{#if (eq payments "autumn")}}
-app.use("/api/autumn/*", async (req, res) => {
+app.use("/api/autumn", async (req, res) => {
 {{#if (eq auth "better-auth")}}
 	const session = await auth.api.getSession({
 		headers: req.headers,
