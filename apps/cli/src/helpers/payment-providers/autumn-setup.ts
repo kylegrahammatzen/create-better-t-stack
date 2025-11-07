@@ -71,23 +71,38 @@ async function runAtmnInit(
 	backend: ProjectConfig["backend"],
 ) {
 	try {
-		const s = spinner();
-		s.start("Running Autumn CLI initialization...");
-
 		const targetApp = backend === "self" ? "apps/web" : "apps/server";
 		const targetDir = path.join(projectDir, targetApp);
 		await fs.ensureDir(targetDir);
 
-		const packageCmd = getPackageExecutionCommand(packageManager, "atmn init");
+		// Step 1: Run atmn login first (in target directory)
+		log.info("Running Autumn CLI login...");
+		const loginCmd = getPackageExecutionCommand(packageManager, "atmn login");
+
+		try {
+			await execa(loginCmd, {
+				shell: true,
+				cwd: targetDir,
+				stdio: "inherit",
+			});
+			log.success(pc.green("Autumn login successful!"));
+		} catch (loginError) {
+			log.warn(pc.yellow("Login skipped or failed, continuing..."));
+			// Continue anyway - user might already be logged in
+		}
+
+		// Step 2: Run atmn init (in same target directory)
+		log.info("Running Autumn CLI initialization...");
+		const initCmd = getPackageExecutionCommand(packageManager, "atmn init");
 
 		// Run with inherit so user sees the OTP prompt and auth flow
-		await execa(packageCmd, {
+		await execa(initCmd, {
 			shell: true,
 			cwd: targetDir,
 			stdio: "inherit",
 		});
 
-		s.stop(pc.green("Autumn initialized successfully!"));
+		log.success(pc.green("Autumn initialized successfully!"));
 
 		// For Convex backend, add instructions for convex env set
 		if (backend === "convex") {

@@ -444,6 +444,14 @@ export const TECH_OPTIONS: Record<
 			default: false,
 		},
 		{
+			id: "autumn",
+			name: "Autumn",
+			description: "Open-source layer between Stripe and your app",
+			icon: `${ICON_BASE_URL}/autumn.svg`,
+			color: "from-violet-500 to-violet-600",
+			default: false,
+		},
+		{
 			id: "none",
 			name: "No Payments",
 			description: "Skip payments integration",
